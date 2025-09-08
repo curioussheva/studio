@@ -18,16 +18,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <header className="p-4 border-b bg-card flex justify-between items-center shrink-0 z-10 shadow-sm">
-        <div className="container mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-bold text-primary flex items-center gap-2">
-            <Tv className="text-accent" />
-            <span>AssetLoaderAds</span>
-          </h1>
-        </div>
-      </header>
-
-      <div className="container mx-auto flex-1 w-full overflow-hidden pb-14">
+      <div className="container mx-auto flex-1 w-full overflow-hidden">
         <main className="h-full w-full">
           <iframe
             src="/assets/home.html"
@@ -35,12 +26,6 @@ export default function Home() {
             className="w-full h-full border-0"
           />
         </main>
-      </div>
-
-      <div className="fixed bottom-0 left-0 right-0 h-14 bg-card border-t flex items-center justify-center z-20">
-          <div className="container mx-auto h-full">
-            <AdBanner />
-          </div>
       </div>
 
       <AdInterstitial
