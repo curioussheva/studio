@@ -24,13 +24,11 @@ export default function Home() {
       </header>
 
       <main className="flex-1 w-full overflow-hidden pb-16">
-        {/* Konten iframe dari index.html sekarang berada di sini */}
-        <div className="flex h-full">
-            <iframe className="h-full border-none w-[250px]" src="/assets/sidebar.html"></iframe>
-            <iframe className="h-full border-none flex-grow" src="/assets/content.html"></iframe>
-        </div>
-
-        
+        <iframe
+          src="/assets/home.html"
+          title="Loaded Content"
+          className="w-full h-full border-0"
+        />
       </main>
 
       <AdBanner />
