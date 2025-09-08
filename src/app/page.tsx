@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import AdBanner from '@/components/ad-banner';
 import AdInterstitial from '@/components/ad-interstitial';
-import { Tv } from 'lucide-react';
 
 export default function Home() {
   const [isInterstitialOpen, setIsInterstitialOpen] = useState(false);
@@ -19,7 +18,7 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen bg-background">
       <div className="container mx-auto flex-1 w-full overflow-hidden">
-        <main className="h-full w-full">
+        <main className="h-full w-full pb-14">
           <iframe
             src="/assets/home.html"
             title="Loaded Content"
@@ -27,11 +26,11 @@ export default function Home() {
           />
         </main>
       </div>
-      <div className="fixed bottom-0 left-0 right-0 h-14 bg-card border-t flex items-center justify-center z-20">
+      <footer className="fixed bottom-0 left-0 right-0 h-14 bg-card border-t flex items-center justify-center z-20">
           <div className="container mx-auto h-full">
             <AdBanner />
           </div>
-      </div>
+      </footer>
       <AdInterstitial
         isOpen={isInterstitialOpen}
         onClose={() => setIsInterstitialOpen(false)}
