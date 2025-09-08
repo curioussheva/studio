@@ -19,19 +19,24 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen bg-background">
       <header className="p-4 border-b bg-card flex justify-between items-center shrink-0 z-10 shadow-sm">
-        <h1 className="text-xl font-bold text-primary flex items-center gap-2">
-          <Tv className="text-accent" />
-          <span>AssetLoaderAds</span>
-        </h1>
+        <div className="container mx-auto flex items-center justify-between">
+          <h1 className="text-xl font-bold text-primary flex items-center gap-2">
+            <Tv className="text-accent" />
+            <span>AssetLoaderAds</span>
+          </h1>
+        </div>
       </header>
 
-      <main className="flex-1 w-full overflow-hidden pb-14">
-        <iframe
-          src="/assets/home.html"
-          title="Loaded Content"
-          className="w-full h-full border-0"
-        />
-      </main>
+      <div className="container mx-auto flex-1 w-full overflow-hidden pb-14">
+        <main className="h-full w-full">
+          <iframe
+            src="/assets/home.html"
+            title="Loaded Content"
+            className="w-full h-full border-0"
+          />
+        </main>
+      </div>
+
 
       <AdBanner />
       <AdInterstitial
