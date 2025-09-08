@@ -1,7 +1,7 @@
 
 'use server';
 /**
- * @fileOverview A flow for sending a contact form email.
+ * @fileOverview A flow for sending a contact form email using Nodemailer.
  *
  * - sendContactEmail - A function that handles sending the contact email.
  * - ContactFormInput - The input type for the sendContactEmail function.
@@ -10,6 +10,10 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'zod';
+import nodemailer from 'nodemailer';
+import {config} from 'dotenv';
+
+config();
 
 const ContactFormInputSchema = z.object({
   name: z.string().describe('The name of the person sending the message.'),
@@ -30,25 +34,6 @@ export async function sendContactEmail(
   return await contactFlow(input);
 }
 
-// In a real application, this prompt would be more complex and might
-// call a tool to send an email via an API like SendGrid or Nodemailer.
-// For this prototype, we simulate a successful email send.
-const contactFlowPrompt = ai.definePrompt({
-  name: 'contactFlowPrompt',
-  input: {schema: ContactFormInputSchema},
-  output: {schema: ContactFormOutputSchema},
-  prompt: `
-    You have received a contact form submission.
-    Sender Name: {{{name}}}
-    Sender Email: {{{email}}}
-    Message: {{{message}}}
-
-    Acknowledge receipt and confirm that the email has been "sent" successfully.
-    Your entire response must be in the JSON format defined by the output schema.
-    Set the success field to true.
-  `,
-});
-
 const contactFlow = ai.defineFlow(
   {
     name: 'contactFlow',
@@ -56,23 +41,41 @@ const contactFlow = ai.defineFlow(
     outputSchema: ContactFormOutputSchema,
   },
   async (input) => {
-    // In a real app, you would add logic here to send an actual email.
-    // For example, using a library like Nodemailer or an API like SendGrid.
-    console.log('Simulating sending email with input:', input);
-    
-    // For now, we will just use the prompt to generate a success response.
-    const llmResponse = await contactFlowPrompt(input);
-    const output = llmResponse.output;
-    if (!output) {
-      return {
-        success: false,
-        message: 'Failed to process the request.',
-      };
-    }
-    // Let's ensure the message is what we want for the user.
-    return {
-        success: true,
-        message: 'Email sent Successfully!',
+    const { name, email, message } = input;
+
+    const transporter = nodemailer.createTransport({
+        service: process.env.EMAIL_SERVICE,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+    });
+
+    const mailOptions = {
+        from: `"${name}" <${email}>`,
+        to: process.env.EMAIL_USER,
+        subject: `Contact Form Submission from ${name}`,
+        html: `
+            <h3>New Contact Form Submission</h3>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Message:</strong></p>
+            <p>${message}</p>
+        `,
     };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        return {
+            success: true,
+            message: 'Email sent successfully!',
+        };
+    } catch (error) {
+        console.error('Error sending email:', error);
+        return {
+            success: false,
+            message: 'Failed to send email.',
+        };
+    }
   }
 );
