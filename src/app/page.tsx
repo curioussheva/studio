@@ -1,17 +1,20 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AdBanner from '@/components/ad-banner';
 import AdInterstitial from '@/components/ad-interstitial';
-import { Button } from '@/components/ui/button';
 import { Tv } from 'lucide-react';
 
 export default function Home() {
   const [isInterstitialOpen, setIsInterstitialOpen] = useState(false);
 
-  const showInterstitial = () => {
-    setIsInterstitialOpen(true);
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsInterstitialOpen(true);
+    }, 120000); // 120000ms = 2 minutes
+
+    return () => clearInterval(interval); // Cleanup on component unmount
+  }, []);
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -20,7 +23,6 @@ export default function Home() {
           <Tv className="text-accent" />
           <span>AssetLoaderAds</span>
         </h1>
-        <Button onClick={showInterstitial}>Show Interstitial Ad</Button>
       </header>
 
       <main className="flex-1 w-full overflow-hidden pb-16">
