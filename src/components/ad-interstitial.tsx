@@ -11,14 +11,28 @@ interface AdInterstitialProps {
 
 const AdInterstitial: FC<AdInterstitialProps> = ({ isOpen, onClose }) => {
   const [countdown, setCountdown] = useState(5);
+  const [adLoaded, setAdLoaded] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       setCountdown(5);
-      const interval = setInterval(() => {
+      setAdLoaded(false);
+
+      const adTimer = setTimeout(() => {
+        try {
+          // @ts-ignore
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          setAdLoaded(true);
+        } catch (err) {
+          console.error('AdSense error:', err);
+          setAdLoaded(true); // Proceed even if ad fails
+        }
+      }, 500); // Small delay to allow component to render
+
+      const countdownTimer = setInterval(() => {
         setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
       }, 1000);
-
+      
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Escape' && countdown === 0) {
           onClose();
@@ -28,11 +42,12 @@ const AdInterstitial: FC<AdInterstitialProps> = ({ isOpen, onClose }) => {
       window.addEventListener('keydown', handleKeyDown);
 
       return () => {
-        clearInterval(interval);
+        clearTimeout(adTimer);
+        clearInterval(countdownTimer);
         window.removeEventListener('keydown', handleKeyDown);
       };
     }
-  }, [isOpen, onClose, countdown]);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
   
@@ -60,12 +75,13 @@ const AdInterstitial: FC<AdInterstitialProps> = ({ isOpen, onClose }) => {
           {canClose ? <X className="h-6 w-6" /> : <span className="text-lg font-bold">{countdown}</span>}
         </Button>
         
-        <div className="text-center">
-            <h2 className="text-4xl font-extrabold text-white drop-shadow-lg">Interstitial Ad</h2>
-            <p className="text-white/80 mt-2 max-w-sm">This is a simulation of a full-screen ad experience.</p>
-            <div className="mt-8 w-[300px] h-[450px] sm:w-[350px] sm:h-[525px] bg-white/10 border-2 border-dashed border-white/20 rounded-xl flex items-center justify-center shadow-2xl">
-                <p className="text-white/60 text-lg">Your Ad Content Here</p>
-            </div>
+        <div className="w-full h-full max-w-full max-h-full flex items-center justify-center">
+            <ins className="adsbygoogle"
+                style={{display: 'block'}}
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="2345678901" // Replace with your interstitial ad slot ID
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
         </div>
       </div>
     </div>
