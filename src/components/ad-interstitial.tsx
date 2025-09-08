@@ -11,25 +11,26 @@ interface AdInterstitialProps {
 
 const AdInterstitial: FC<AdInterstitialProps> = ({ isOpen, onClose }) => {
   const [countdown, setCountdown] = useState(5);
-  const [adLoaded, setAdLoaded] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    let countdownTimer: NodeJS.Timeout;
+    
+    if (isOpen && isClient) {
       setCountdown(5);
-      setAdLoaded(false);
 
-      const adTimer = setTimeout(() => {
-        try {
-          // @ts-ignore
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-          setAdLoaded(true);
-        } catch (err) {
-          console.error('AdSense error:', err);
-          setAdLoaded(true); // Proceed even if ad fails
-        }
-      }, 500); // Small delay to allow component to render
+      try {
+        // @ts-ignore
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (err) {
+        console.error('AdSense interstitial error:', err);
+      }
 
-      const countdownTimer = setInterval(() => {
+      countdownTimer = setInterval(() => {
         setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
       }, 1000);
       
@@ -42,14 +43,13 @@ const AdInterstitial: FC<AdInterstitialProps> = ({ isOpen, onClose }) => {
       window.addEventListener('keydown', handleKeyDown);
 
       return () => {
-        clearTimeout(adTimer);
         clearInterval(countdownTimer);
         window.removeEventListener('keydown', handleKeyDown);
       };
     }
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, isClient]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !isClient) return null;
   
   const canClose = countdown === 0;
 
@@ -77,9 +77,9 @@ const AdInterstitial: FC<AdInterstitialProps> = ({ isOpen, onClose }) => {
         
         <div className="w-full h-full max-w-full max-h-full flex items-center justify-center">
             <ins className="adsbygoogle"
-                style={{display: 'block'}}
-                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                data-ad-slot="2345678901" // Replace with your interstitial ad slot ID
+                style={{display: 'block', width: '320px', height: '480px'}} // Example size
+                data-ad-client="ca-pub-2718792162592521/2240406446"
+                data-ad-slot="2345678901"
                 data-ad-format="auto"
                 data-full-width-responsive="true"></ins>
         </div>

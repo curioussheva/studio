@@ -1,23 +1,35 @@
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const AdBanner = () => {
+  const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
-    try {
-      // @ts-ignore
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error(err);
-    }
+    setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (isClient) {
+      try {
+        // @ts-ignore
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (err) {
+        console.error('AdSense banner error:', err);
+      }
+    }
+  }, [isClient]);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-0 left-0 right-0 h-16 bg-card border-t flex items-center justify-center z-20">
       <ins
         className="adsbygoogle"
-        style={{ display: 'block' }}
-        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-        data-ad-slot="1234567890" // Replace with your ad slot ID
+        style={{ display: 'block', width: '100%', height: '100%' }}
+        data-ad-client="ca-pub-2718792162592521/1039823651"
+        data-ad-slot="1234567890" 
         data-ad-format="auto"
         data-full-width-responsive="true"
       ></ins>
