@@ -25,7 +25,7 @@ export default function Home() {
         </h1>
       </header>
 
-      <main className="flex-1 w-full overflow-hidden pb-16">
+      <main className="flex-1 w-full overflow-hidden pb-14">
         <iframe
           src="/assets/home.html"
           title="Loaded Content"
