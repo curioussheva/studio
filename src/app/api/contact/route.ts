@@ -1,24 +1,31 @@
 
-import {NextResponse} from 'next/server';
-import {sendContactEmail} from '@/ai/flows/send-contact-email';
+import {NextResponse, type NextRequest} from 'next/server';
+import {
+  sendContactEmail,
+  type ContactFormInput,
+} from '@/ai/flows/send-contact-email';
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const body = await request.json();
-    const {name, email, message} = body;
-
-    if (!name || !email || !message) {
+    const body: ContactFormInput = await req.json();
+    const result = await sendContactEmail(body);
+    if (result.success) {
       return NextResponse.json(
-        {error: 'Missing required fields'},
-        {status: 400}
+        {message: result.message},
+        {status: 200}
+      );
+    } else {
+      return NextResponse.json(
+        {message: result.message},
+        {status: 500}
       );
     }
-
-    const result = await sendContactEmail({name, email, message});
-
-    return NextResponse.json(result);
-  } catch (e: any) {
-    console.error(e);
-    return NextResponse.json({error: e.message}, {status: 500});
+  } catch (error) {
+    let errorMessage = 'An unknown error occurred';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    return NextResponse.json({message: 'Error: ' + errorMessage}, {status: 500});
   }
 }
+
