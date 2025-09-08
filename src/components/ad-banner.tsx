@@ -24,10 +24,10 @@ const AdBanner = () => {
   }
 
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full flex items-center justify-center">
       <ins
         className="adsbygoogle"
-        style={{ display: 'block', width: '100%', height: '100%' }}
+        style={{ display: 'block', width: '100%', height: '50px' }}
         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
         data-ad-slot="1234567890"
         data-ad-format="auto"
