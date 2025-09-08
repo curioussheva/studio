@@ -62,7 +62,7 @@ const contactFlow = ai.defineFlow(
     
     // For now, we will just use the prompt to generate a success response.
     const llmResponse = await contactFlowPrompt(input);
-    const output = llmResponse.output();
+    const output = llmResponse.output;
     if (!output) {
       return {
         success: false,
