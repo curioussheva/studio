@@ -37,8 +37,12 @@ export default function Home() {
         </main>
       </div>
 
+      <div className="fixed bottom-0 left-0 right-0 h-14 bg-card border-t flex items-center justify-center z-20">
+          <div className="container mx-auto h-full">
+            <AdBanner />
+          </div>
+      </div>
 
-      <AdBanner />
       <AdInterstitial
         isOpen={isInterstitialOpen}
         onClose={() => setIsInterstitialOpen(false)}
