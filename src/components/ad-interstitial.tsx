@@ -78,7 +78,7 @@ const AdInterstitial: FC<AdInterstitialProps> = ({ isOpen, onClose }) => {
         <div className="w-full h-full max-w-full max-h-full flex items-center justify-center">
             <ins className="adsbygoogle"
                 style={{display: 'block', width: '320px', height: '480px'}} // Example size
-                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-client="ca-app-pub-XXXXXXXXXXXXXXXX"
                 data-ad-slot="2345678901"
                 data-ad-format="auto"
                 data-full-width-responsive="true"></ins>
