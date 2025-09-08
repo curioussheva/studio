@@ -26,7 +26,7 @@ export default function Home() {
           />
         </main>
       </div>
-      <footer className="fixed bottom-0 left-0 right-0 h-14 bg-card border-t flex items-center justify-center z-20">
+      <footer className="fixed bottom-0 left-0 right-0 h-14  border-t flex items-center justify-center z-20">
           <div className="container mx-auto h-full">
             <AdBanner />
           </div>
