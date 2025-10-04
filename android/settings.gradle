@@ -1,5 +1,12 @@
-include ':app'
-include ':capacitor-cordova-android-plugins'
-project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
 
-apply from: 'capacitor.settings.gradle'
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google() // <-- Make sure this is present
+        mavenCentral() // <-- Make sure this is present
+    }
+}
+
+rootProject.name = "Javanese2000"
+include(":app")
